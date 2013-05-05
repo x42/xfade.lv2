@@ -71,13 +71,14 @@ Consider the following simple diagrams:
        -1     0     +1
 ```
 
-Screenshot
-----------
+Screenshots
+-----------
 
 xfade.lv2 running in jalv.gtk:
 
 ![screenshot](https://raw.github.com/x42/xfade.lv2/master/screenshot_jalv.png "Basic Controls in jalv")
 
+With Ardour3, use a 4 channel bus, bypass the VBAP-pan control and only connect Bus outputs 1&2 to the master bus:
+
 ![screenshot](https://raw.github.com/x42/xfade.lv2/master/screenshot_ardour.png "Ardour3 and xfade.lv2")
 
-NB. With Ardour3, use a 4 channel bus, bypass the VBAP panner and only connect the Bus output 1&2 to master.
