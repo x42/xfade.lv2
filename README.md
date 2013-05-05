@@ -34,8 +34,8 @@ Fades between Input A (left-end: -1) and Input B (right-end: +1)
 ### Fade Shape
 Allows to smoothly choose the A/B behaviour:
 
-* Linear (default): constant Amplitude.  Out ~= InA + InB
-* Equal Power: retain signal power. Out^2 ~= InA^2 + InB^2
+* Linear (default): constant Amplitude.  Out ∝ InA + InB
+* Equal Power: retain signal power. Out<sup>2</sup> ∝ InA<sup>2</sup> + InB<sup>2</sup>
 
 ### Fade Mode
 * X-fade: Inputs are fade over the complete range of the _Signal A/B_ control.
