@@ -1,0 +1,7 @@
+/manifest.ttl
+/xfade.ttl
+*.so
+
+*.swp
+cscope.*
+tags
