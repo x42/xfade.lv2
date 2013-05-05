@@ -70,3 +70,10 @@ Consider the following simple diagrams:
       +-----------------> (A/B control)
        -1     0     +1
   ``
+
+Screenshot
+----------
+
+xfade.lv running in jalv.gtk:
+
+![screenshot](https://raw.github.com/x42/xfade.lv2/master/screenshot_jalv.png "xfade.lv2 running in jalv.gtk")
