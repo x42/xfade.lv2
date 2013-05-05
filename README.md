@@ -69,12 +69,12 @@ Consider the following simple diagrams:
   0.0 |AB           AA
       +-----------------> (A/B control)
        -1     0     +1
-  ``
+```
 
 Screenshot
 ----------
 
 xfade.lv2 running in jalv.gtk:
 
-![screenshot](https://raw.github.com/x42/xfade.lv2/master/screenshot_jalv.png)
+![screenshot](https://raw.github.com/x42/xfade.lv2/master/screenshot_jalv.png "Basic Controls in jalv")
 
