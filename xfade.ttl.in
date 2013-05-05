@@ -32,7 +32,7 @@
 			lv2:ControlPort ;
 		lv2:index 1 ;
 		lv2:symbol "shape" ;
-		lv2:name "xfade shape";
+		lv2:name "Shape";
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
@@ -48,16 +48,16 @@
 			lv2:ControlPort ;
 		lv2:index 2 ;
 		lv2:symbol "mode" ;
-		lv2:name "xfade mode";
+		lv2:name "mode";
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
 		lv2:portProperty lv2:integer, lv2:enumeration;
 		lv2:scalePoint [
-			rdfs:label "X-fade: overlapping cross fade: [-1..+1]" ;
+			rdfs:label "X-fade: Overlapping Cross Fade: [-1..+1]" ;
 			rdf:value 0.0
 		] , [
-			rdfs:label "V-fade: non-overlapping fade [-1..0], [0..1]" ;
+			rdfs:label "V-fade: Non-overlapping Fade [-1..0], [0..1]" ;
 			rdf:value 1.0
 		]
 	] , [
