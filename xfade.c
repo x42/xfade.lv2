@@ -39,6 +39,8 @@
 
 typedef enum {
 	XFC_XFADE,
+	XFC_SHAPE,
+	XFC_MODE,
 	XFC_IN0L,
 	XFC_IN0R,
 	XFC_IN1L,
@@ -50,6 +52,8 @@ typedef enum {
 typedef struct {
 	/* control ports */
 	float* xfade;
+	float* shape;
+	float* mode;
 	float* input[IPORTS][CHANNELS];
 	float* output[CHANNELS];
 
@@ -66,42 +70,82 @@ run(LV2_Handle instance, uint32_t n_samples)
 {
 	XfadeControl* self = (XfadeControl*)instance;
 	const float xfade = *self->xfade;
-
+	const float shape = RAIL(*self->shape, 0.0, 1.0);
+	const int   mode  = (int) RAIL(*self->mode, 0.0, 1.0);
 	const uint32_t fade_len = (n_samples >= FADE_LEN) ? FADE_LEN : n_samples;
+	float gain[IPORTS];
+	float gainP[IPORTS];
+	float gainL[IPORTS];
 
-	float gain_0 = 1.0;
-	float gain_1 = 1.0;
+	if (mode == 1) { /* V-fade - non overlapping */
+		if (xfade < 0) {
+			gainL[0] = 1.0;
+			gainP[0] = 1.0;
+			gainL[1] = 1.0 + RAIL(xfade, -1.0, 0.0);
+			gainP[1] = sqrt(1.0 + RAIL(xfade, -1.0, 0.0));
+		} else if (xfade > 0) {
+			gainL[0] = 1.0 - RAIL(xfade, 0.0, 1.0);
+			gainP[0] = sqrt(1.0 - RAIL(xfade, 0.0, 1.0));
+			gainL[1] = 1.0;
+			gainP[1] = 1.0;
+		} else {
+			gainL[0] = 1.0;
+			gainL[1] = 1.0;
+			gainP[0] = 1.0;
+			gainP[1] = 1.0;
+		}
 
-	if (xfade == -1.0) {
-		gain_0 = 1.0;
-		gain_1 = 0.0;
-	} else if (xfade == 1.0) {
-		gain_0 = 0.0;
-		gain_1 = 1.0;
-	} else {
-		gain_1 = sqrt(.5 + xfade/2.0);
-		gain_0 = sqrt(.5 - xfade/2.0);
+	} else { /* X-fade overlapping */
+
+		gainL[1] = 0.5 + RAIL(xfade, -1.0, 1.0)/2.0;
+		gainL[0] = 1.0 - gainL[1];
+
+		/* equal power gain */
+		if (xfade == -1.0) {
+			gainP[0] = 1.0;
+			gainP[1] = 0.0;
+		} else if (xfade == 1.0) {
+			gainP[0] = 0.0;
+			gainP[1] = 1.0;
+		} else {
+			gainP[1] = sqrt(.5 + RAIL(xfade/2.0, -.5, .5));
+			gainP[0] = sqrt(.5 - RAIL(xfade/2.0, -.5, .5));
+		}
+
 	}
+
+
+	gain[0] = shape * gainP[0] + (1.0 - shape) * gainL[0];
+	gain[1] = shape * gainP[1] + (1.0 - shape) * gainL[1];
+
+#if 0 // debug
+#define VALTODB(V) (20.0f * log10f(V))
+	printf("%.2fdB %.2fdB ||A: %.2f %.2f || B: %.2f %.2f || s:%.2f m:%d\n",
+			VALTODB(gain[0]), VALTODB(gain[1]),
+			gainL[0], gainL[1],
+			gainP[0], gainP[1], shape, mode
+			);
+#endif
 
 	for (int c = 0; c < CHANNELS; ++c) {
 		uint32_t pos = 0;
-		if (self->c_amp[0] == gain_0 &&  self->c_amp[1] == gain_1) {
+		if (self->c_amp[0] == gain[0] &&  self->c_amp[1] == gain[1]) {
 			for (pos = 0; pos < n_samples; pos++) {
 				self->output[c][pos] =
-						self->input[0][c][pos] * gain_0
-					+ self->input[1][c][pos] * gain_1;
+						self->input[0][c][pos] * gain[0]
+					+ self->input[1][c][pos] * gain[1];
 			}
 		} else {
 			for (pos = 0; pos < n_samples; pos++) {
 				self->output[c][pos] =
-						self->input[0][c][pos] * SMOOTHGAIN(self->c_amp[0], gain_0)
-					+ self->input[1][c][pos] * SMOOTHGAIN(self->c_amp[1], gain_1);
+						self->input[0][c][pos] * SMOOTHGAIN(self->c_amp[0], gain[0])
+					+ self->input[1][c][pos] * SMOOTHGAIN(self->c_amp[1], gain[1]);
 			}
 		}
 	}
 
-	self->c_amp[0] = gain_0;
-	self->c_amp[1] = gain_1;
+	self->c_amp[0] = gain[0];
+	self->c_amp[1] = gain[1];
 }
 
 static LV2_Handle
@@ -131,6 +175,12 @@ connect_port(LV2_Handle instance,
 	switch ((PortIndex)port) {
 	case XFC_XFADE:
 		self->xfade = data;
+		break;
+	case XFC_SHAPE:
+		self->shape = data;
+		break;
+	case XFC_MODE:
+		self->mode = data;
 		break;
 	case XFC_IN0L:
 		self->input[0][C_LEFT] = data;
