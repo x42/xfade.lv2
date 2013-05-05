@@ -27,6 +27,16 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2:scalePoint [
+			rdfs:label "A" ;
+			rdf:value -1.0
+		] , [
+			rdfs:label "A+B" ;
+			rdf:value 0.0
+		] , [
+			rdfs:label "B" ;
+			rdf:value 1.0
+		]
 	] , [
 		a lv2:InputPort ,
 			lv2:ControlPort ;
@@ -48,7 +58,7 @@
 			lv2:ControlPort ;
 		lv2:index 2 ;
 		lv2:symbol "mode" ;
-		lv2:name "mode";
+		lv2:name "Mode";
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
