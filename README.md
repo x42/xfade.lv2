@@ -76,5 +76,5 @@ Screenshot
 
 xfade.lv2 running in jalv.gtk:
 
-![screenshot](https://raw.github.com/x42/xfade.lv2/master/screenshot_jalv.png "xfade.lv2 running in jalv.gtk")
+![screenshot](https://raw.github.com/x42/xfade.lv2/master/screenshot_jalv.png)
 
