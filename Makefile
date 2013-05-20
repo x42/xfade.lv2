@@ -16,12 +16,8 @@ LOADLIBES=-lm
 LV2NAME=xfade
 BUNDLE=xfade.lv2
 
-CFLAGS+=-fPIC -std=c99
-
-IS_OSX=
 UNAME=$(shell uname)
 ifeq ($(UNAME),Darwin)
-  IS_OSX=yes
   LV2LDFLAGS=-dynamiclib
   LIB_EXT=.dylib
 else
@@ -34,9 +30,10 @@ targets=$(LV2NAME)$(LIB_EXT)
 # check for build-dependencies
 ifeq ($(shell pkg-config --exists lv2 || echo no), no)
   $(error "LV2 SDK was not found")
-else
-  CFLAGS+=`pkg-config --cflags lv2`
 endif
+
+override CFLAGS += -fPIC -std=c99
+override CFLAGS += `pkg-config --cflags lv2`
 
 # build target definitions
 default: all
@@ -51,9 +48,9 @@ $(LV2NAME).ttl: $(LV2NAME).ttl.in
 	cat $(LV2NAME).ttl.in > $(LV2NAME).ttl
 
 $(LV2NAME)$(LIB_EXT): xfade.c
-	$(CC) $(CFLAGS) \
+	$(CC) $(CPPFLAGS) $(CFLAGS) \
 	  -o $(LV2NAME)$(LIB_EXT) xfade.c \
-	  -shared $(LDFLAGS) $(LV2LDFLAGS) $(LOADLIBES)
+	  -shared $(LV2LDFLAGS) $(LDFLAGS) $(LOADLIBES)
 
 # install/uninstall/clean target definitions
 
