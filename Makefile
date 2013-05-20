@@ -25,7 +25,6 @@ ifeq ($(UNAME),Darwin)
   LV2LDFLAGS=-dynamiclib
   LIB_EXT=.dylib
 else
-  CFLAGS+= -DHAVE_MEMSTREAM
   LV2LDFLAGS=-Wl,-Bstatic -Wl,-Bdynamic
   LIB_EXT=.so
 endif
@@ -33,10 +32,10 @@ endif
 targets=$(LV2NAME)$(LIB_EXT)
 
 # check for build-dependencies
-ifeq ($(shell pkg-config --exists lv2 lv2core || echo no), no)
+ifeq ($(shell pkg-config --exists lv2 || echo no), no)
   $(error "LV2 SDK was not found")
 else
-  CFLAGS+=`pkg-config --cflags lv2 lv2core`
+  CFLAGS+=`pkg-config --cflags lv2`
 endif
 
 # build target definitions
@@ -54,7 +53,7 @@ $(LV2NAME).ttl: $(LV2NAME).ttl.in
 $(LV2NAME)$(LIB_EXT): xfade.c
 	$(CC) $(CFLAGS) \
 	  -o $(LV2NAME)$(LIB_EXT) xfade.c \
-	  $(LDFLAGS) $(LOADLIBES) -shared $(LV2LDFLAGS)
+	  -shared $(LDFLAGS) $(LV2LDFLAGS) $(LOADLIBES)
 
 # install/uninstall/clean target definitions
 
