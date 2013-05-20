@@ -2,7 +2,6 @@
 
 # these can be overridden using make variables. e.g.
 #   make CFLAGS=-O2
-#   make install DESTDIR=$(CURDIR)/debian/xfade PREFIX=/usr
 #
 OPTIMIZATIONS ?= -msse -msse2 -mfpmath=sse -ffast-math -fomit-frame-pointer -O3 -fno-finite-math-only
 PREFIX ?= /usr/local
@@ -47,9 +46,9 @@ manifest.ttl: manifest.ttl.in
 $(LV2NAME).ttl: $(LV2NAME).ttl.in
 	cat $(LV2NAME).ttl.in > $(LV2NAME).ttl
 
-$(LV2NAME)$(LIB_EXT): xfade.c
+$(LV2NAME)$(LIB_EXT): $(LV2NAME).c
 	$(CC) $(CPPFLAGS) $(CFLAGS) \
-	  -o $(LV2NAME)$(LIB_EXT) xfade.c \
+	  -o $(LV2NAME)$(LIB_EXT) $(LV2NAME).c \
 	  -shared $(LV2LDFLAGS) $(LDFLAGS) $(LOADLIBES)
 
 # install/uninstall/clean target definitions
@@ -60,11 +59,12 @@ install: all
 	install -m644 manifest.ttl $(LV2NAME).ttl $(DESTDIR)$(LV2DIR)/$(BUNDLE)
 
 uninstall:
-	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/*.ttl
+	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/manifest.ttl
+	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/$(LV2NAME).ttl
 	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/$(LV2NAME)$(LIB_EXT)
 	-rmdir $(DESTDIR)$(LV2DIR)/$(BUNDLE)
 
 clean:
-	rm -f manifest.ttl xfade.ttl $(LV2NAME)$(LIB_EXT)
+	rm -f manifest.ttl $(LV2NAME).ttl $(LV2NAME)$(LIB_EXT)
 
 .PHONY: clean all install uninstall
