@@ -7,7 +7,7 @@ xfade.lv2 is an audio-plugin for stereo cross-fading
 Install
 -------
 
-Compiling this plugin requires LV2 SDK (lv2 lv2core), gnu-make and a c-compiler.
+Compiling this plugin requires LV2 SDK, gnu-make and a c-compiler.
 
 ```bash
   git clone git://github.com/x42/xfade.lv2.git
