@@ -8,6 +8,7 @@ PREFIX ?= /usr/local
 CFLAGS ?= $(OPTIMIZATIONS) -Wall
 LIBDIR ?= lib
 
+xfade_VERSION?=$(shell git describe --tags HEAD 2>/dev/null | sed 's/-g.*$$//;s/^v//' || echo "LV2")
 ###############################################################################
 
 LV2DIR ?= $(PREFIX)/$(LIBDIR)/lv2
@@ -19,12 +20,19 @@ UNAME=$(shell uname)
 ifeq ($(UNAME),Darwin)
   LV2LDFLAGS=-dynamiclib
   LIB_EXT=.dylib
+  EXTENDED_RE=-E
 else
   LV2LDFLAGS=-Wl,-Bstatic -Wl,-Bdynamic
   LIB_EXT=.so
+  EXTENDED_RE=-r
 endif
 
 targets=$(LV2NAME)$(LIB_EXT)
+
+###############################################################################
+# extract versions
+LV2VERSION=$(xfade_VERSION)
+include git2lv2.mk
 
 # check for build-dependencies
 ifeq ($(shell pkg-config --exists lv2 || echo no), no)
@@ -44,7 +52,8 @@ manifest.ttl: manifest.ttl.in
 	  manifest.ttl.in > manifest.ttl
 
 $(LV2NAME).ttl: $(LV2NAME).ttl.in
-	cat $(LV2NAME).ttl.in > $(LV2NAME).ttl
+	sed "s/@VERSION@/lv2:microVersion $(LV2MIC) ;lv2:minorVersion $(LV2MIN) ;/g" \
+		$(LV2NAME).ttl.in > $(LV2NAME).ttl
 
 $(LV2NAME)$(LIB_EXT): $(LV2NAME).c
 	$(CC) $(CPPFLAGS) $(CFLAGS) \

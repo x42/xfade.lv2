@@ -17,6 +17,7 @@
 	doap:license <http://usefulinc.com/doap/licenses/gpl> ;
 	doap:maintainer <http://gareus.org/rgareus#me> ;
 	doap:name "Stereo DJ X-Fade";
+	@VERSION@
 	lv2:optionalFeature lv2:hardRTCapable ;
 	lv2:port [
 		a lv2:InputPort ,
