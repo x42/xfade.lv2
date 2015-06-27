@@ -1,2 +1,6 @@
+2015-06-27 (0.2.0)  Robin Gareus <robin@gareus.org>
+* add lv2 version to plugin description
+* explicitly specify integers as int in ttl
+
 2013-06-08 (0.1.0)  Robin Gareus <robin@gareus.org>
 * initial release
