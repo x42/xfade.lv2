@@ -113,4 +113,6 @@
 		lv2:symbol "out_right" ;
 		lv2:name "Out Right" ;
 		lv2:designation pg:right ;
-	] .
+	] ;
+	rdfs:comment "stereo DJ X-fade plugin"
+	.
