@@ -1,6 +1,4 @@
-/manifest.ttl
-/xfade.ttl
-*.so
+/build
 
 *.swp
 cscope.*
