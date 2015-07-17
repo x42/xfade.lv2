@@ -8,8 +8,8 @@ PREFIX ?= /usr/local
 CFLAGS ?= $(OPTIMIZATIONS) -Wall
 LIBDIR ?= lib
 
-STRIP=strip
-STRIPFLAGS=-s
+STRIP?=strip
+STRIPFLAGS?=-s
 
 xfade_VERSION?=$(shell git describe --tags HEAD 2>/dev/null | sed 's/-g.*$$//;s/^v//' || echo "LV2")
 ###############################################################################
