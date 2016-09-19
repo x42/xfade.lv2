@@ -66,7 +66,7 @@ Consider the following simple diagrams:
       |    B     A         | V-fade mode |
       |   B       A        +-------------+
       |  B         A
-  0.0 |AB           AA
+  0.0 |BB           AA
       +-----------------> (A/B control)
        -1     0     +1
 ```
