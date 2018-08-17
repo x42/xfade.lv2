@@ -88,11 +88,17 @@ install: all
 	install -d $(DESTDIR)$(LV2DIR)/$(BUNDLE)
 	install -m755 $(BUILDDIR)$(LV2NAME)$(LIB_EXT) $(DESTDIR)$(LV2DIR)/$(BUNDLE)
 	install -m644 $(BUILDDIR)manifest.ttl $(BUILDDIR)$(LV2NAME).ttl $(DESTDIR)$(LV2DIR)/$(BUNDLE)
+	install -m644 $(BUILDDIR)$(LV2NAME).ttl $(DESTDIR)$(LV2DIR)/$(BUNDLE)
+	install -m644 default-preset.ttl modgui.ttl $(DESTDIR)$(LV2DIR)/$(BUNDLE)
+	cp -R modgui $(DESTDIR)$(LV2DIR)/$(BUNDLE)/modgui
 
 uninstall:
 	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/manifest.ttl
 	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/$(LV2NAME).ttl
 	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/$(LV2NAME)$(LIB_EXT)
+	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/modgui.ttl
+	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/default-preset.ttl
+	rm -rf $(DESTDIR)$(LV2DIR)/$(BUNDLE)/modgui
 	-rmdir $(DESTDIR)$(LV2DIR)/$(BUNDLE)
 
 clean:
