@@ -5,6 +5,7 @@
 @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix mod: <http://moddevices.com/ns/mod#> .
 
 <http://gareus.org/rgareus#me>
 	a foaf:Person ;
@@ -16,8 +17,9 @@
 	a lv2:Plugin, lv2:MixerPlugin, doap:Project;
 	doap:license <http://usefulinc.com/doap/licenses/gpl> ;
 	doap:maintainer <http://gareus.org/rgareus#me> ;
-	doap:name "Stereo DJ X-Fade";
+	doap:name "Stereo X-Fade";
 	@VERSION@
+	mod:brand "x42" ;
 	lv2:optionalFeature lv2:hardRTCapable ;
 	lv2:port [
 		a lv2:InputPort ,
@@ -65,10 +67,10 @@
 		lv2:maximum 1 ;
 		lv2:portProperty lv2:integer, lv2:enumeration;
 		lv2:scalePoint [
-			rdfs:label "X-fade: Overlapping Cross Fade: [-1..+1]" ;
+			rdfs:label "X-fade: Overlap [-1..+1]" ;
 			rdf:value 0 ;
 		] , [
-			rdfs:label "V-fade: Non-overlapping Fade [-1..0], [0..1]" ;
+			rdfs:label "V-fade: Non-overlap [-1..0][0..1]" ;
 			rdf:value 1 ;
 		]
 	] , [
@@ -114,5 +116,5 @@
 		lv2:name "Out Right" ;
 		lv2:designation pg:right ;
 	] ;
-	rdfs:comment "stereo DJ X-fade plugin"
+	rdfs:comment "A stereo crossfade plugin"
 	.
