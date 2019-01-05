@@ -8,6 +8,7 @@ PREFIX ?= /usr/local
 CFLAGS ?= $(OPTIMIZATIONS) -Wall
 LIBDIR ?= lib
 
+PKG_CONFIG?=pkg-config
 STRIP?=strip
 STRIPFLAGS?=-s
 
@@ -50,12 +51,12 @@ LV2VERSION=$(xfade_VERSION)
 include git2lv2.mk
 
 # check for build-dependencies
-ifeq ($(shell pkg-config --exists lv2 || echo no), no)
+ifeq ($(shell $(PKG_CONFIG) --exists lv2 || echo no), no)
   $(error "LV2 SDK was not found")
 endif
 
 override CFLAGS += -fPIC -std=c99
-override CFLAGS += `pkg-config --cflags lv2`
+override CFLAGS += `$(PKG_CONFIG) --cflags lv2`
 
 # build target definitions
 default: all
