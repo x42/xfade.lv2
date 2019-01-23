@@ -1,12 +1,7 @@
 #!/usr/bin/make -f
-
-# these can be overridden using make variables. e.g.
-#   make CFLAGS=-O2
-#
-OPTIMIZATIONS ?= -msse -msse2 -mfpmath=sse -ffast-math -fomit-frame-pointer -O3 -fno-finite-math-only
+OPTIMIZATIONS ?= -msse -msse2 -mfpmath=sse -ffast-math -fomit-frame-pointer -O3 -fno-finite-math-only -DNDEBUG
 PREFIX ?= /usr/local
 CFLAGS ?= $(OPTIMIZATIONS) -Wall
-LIBDIR ?= lib
 
 PKG_CONFIG?=pkg-config
 STRIP?=strip
@@ -15,7 +10,7 @@ STRIPFLAGS?=-s
 xfade_VERSION?=$(shell git describe --tags HEAD 2>/dev/null | sed 's/-g.*$$//;s/^v//' || echo "LV2")
 ###############################################################################
 
-LV2DIR ?= $(PREFIX)/$(LIBDIR)/lv2
+LV2DIR ?= $(PREFIX)/lib/lv2
 LOADLIBES=-lm
 LV2NAME=xfade
 BUNDLE=xfade.lv2
@@ -41,6 +36,8 @@ ifneq ($(XWIN),)
   LV2LDFLAGS=-Wl,-Bstatic -Wl,-Bdynamic -Wl,--as-needed
   LIB_EXT=.dll
   override LDFLAGS += -static-libgcc -static-libstdc++
+else
+  override CFLAGS += -fPIC -fvisibility=hidden
 endif
 
 targets+=$(BUILDDIR)$(LV2NAME)$(LIB_EXT)
@@ -55,8 +52,7 @@ ifeq ($(shell $(PKG_CONFIG) --exists lv2 || echo no), no)
   $(error "LV2 SDK was not found")
 endif
 
-override CFLAGS += -fPIC -std=c99
-override CFLAGS += `$(PKG_CONFIG) --cflags lv2`
+override CFLAGS += -std=c99 `$(PKG_CONFIG) --cflags lv2`
 
 # build target definitions
 default: all
