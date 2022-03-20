@@ -10,7 +10,7 @@ Install
 Compiling this plugin requires LV2 SDK, gnu-make and a c-compiler.
 
 ```bash
-  git clone git://github.com/x42/xfade.lv2.git
+  git clone https://github.com/x42/xfade.lv2.git
   cd xfade.lv2
   make
   sudo make install PREFIX=/usr
